@@ -1,0 +1,7 @@
+{
+  defaultModelRendering: "model",
+  defaultModelExpandDepth: 10,
+  tryItOutEnabled: false,
+  supportedSubmitMethods: [],
+  defaultModelsExpandDepth: -1,
+}
