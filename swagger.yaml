@@ -1,0 +1,1961 @@
+openapi: 3.0.3
+info:
+  title: Sage API
+  description: |-
+
+
+  version: 2.0.0
+
+
+tags:
+  - name: Articles
+  - name: Company parameters
+  - name: Customers
+  - name: Customers Contacts
+  - name: Customers Delivery
+  - name: Documents
+  - name: Subscription Models
+  - name: Subscriptions 
+  - name: Subscription Process
+
+paths:
+  /api/v2/subscriptions:
+    get:
+      tags:
+        - Subscriptions
+      description: Retourne la liste des abonnements   
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionsGet'           
+    post:
+      tags:
+        - Subscriptions
+      description: Ajoute un abonnement
+      requestBody:
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionsPost'  
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectAdded'   
+                
+  /api/v2/customers:
+    get:
+      tags:
+        - Customers
+      summary: ""
+      description: Retourne la liste des clients
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'   
+    post:
+      tags:
+        - Customers
+      description: Ajoute un client
+      requestBody:
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerPost'  
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectAdded'   
+        '422':
+          description: Duplicate key
+    put:
+      tags:
+        - Customers
+      description: Modifit un client
+      requestBody:
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerPut'  
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectEdited'   
+        '422':
+          description: Duplicate key      
+  /api/v2/customers/{customerId}:
+    get:
+      tags:
+        - Customers
+      description: Retourne le détail d'un client
+      parameters:
+        - name: customerId
+          in: path
+          description: Id du client a retourner
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDetail'   
+  /api/v2/customers/{customerId}/contact:
+    post:
+      tags:
+        - Customers Contacts
+      description: |
+        Ajoute un contact à au client d'id = `customerId`
+        ```
+        Attention : Il n'est pas possible d'avoir pour un même client deux contacts avec les même noms et prénoms
+        ```
+      parameters:
+        - name: customerId
+          in: path
+          description: Id du client
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/ContactPost'  
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectAdded'   
+        '422':
+          description: Duplicate key   
+    put:
+      tags:
+        - Customers Contacts
+      description: |
+        Ajoute un contact à au client d'id = `customerId`
+        ```
+        Attention : Il n'est pas possible d'avoir pour un même client deux contacts avec les même noms et prénoms
+        ```
+      parameters:
+        - name: customerId
+          in: path
+          description: Id du client
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/ContactPut'  
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectEdited'   
+        '422':
+          description: Duplicate key   
+  /api/v2/customers/contact/{contactId}:
+    delete:
+      tags:
+        - Customers Contacts
+      description: Suppression d'un contact
+      parameters:
+        - name: contactId
+          in: path
+          description: Id du contact
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Contact deleted."
+                  id:
+                    type: integer
+                    example: 24
+                    
+  /api/v2/customers/{customerId}/delivery-adresses:           
+    post:
+      tags:
+        - Customers Delivery
+      description: Suppression d'un contact
+      parameters:
+        - name: customerId
+          in: path
+          description: Id du client
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryPost'  
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectAdded'  
+                
+  /api/v2/customers/delivery-adresses:           
+    put:
+      tags:
+        - Customers Delivery
+      description: Suppression d'un contact
+      requestBody:
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryPut'  
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectEdited'  
+                
+  /api/v2/customers/delivery-adresses/{deliveryAdressId}/main:
+    patch:
+      tags: 
+        - Customers Delivery
+      description: Passe l'adresse de livraison en adresse principale
+      parameters:
+        - name: deliveryAdressId
+          in: path
+          description: Id de l'adresse de livraison
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Main address changed"
+                  id:
+                    type: integer
+                    example: 24
+  /api/v2/delivery-orders:
+    post:
+      tags:
+        - Documents
+      requestBody:
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryOrderPost'  
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectAdded'   
+        '422':
+          description: Duplicate key  
+          
+  /api/v2/articles:
+    get:
+      tags:
+        - Articles
+      description: Retourne les articles
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Articles'   
+                
+  /api/v2/company/numbering:
+    get:
+      tags:
+        - Company parameters
+      description: Retourne les souches de documents
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Numbering'     
+                
+  /api/v2/company/departments:
+    get:
+      tags:
+        - Company parameters
+      description: Retourne les services
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Departments'
+                
+  /api/v2/company/type-of-contacts:
+    get:
+      tags:
+        - Company parameters
+      description: Retourne les types de contacts
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactsType'
+                
+  /api/v2/company/accounting-categories:
+    get:
+      tags:
+        - Company parameters
+      description: Retourne les catégories comptables
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountingCategorie'  
+                
+  /api/v2/company/chart-of-accounts:
+    get:
+      tags:
+        - Company parameters
+      description: Retourne le plan comptable
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoA'  
+                
+  /api/v2/company/payment-methods:
+    get:
+      tags:
+        - Company parameters
+      description: Retourne les méthodes de payement
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Settlement'  
+                
+  /api/v2/company/delivery:
+    get:
+      tags:
+        - Company parameters
+      description: Retourne les mode d'expédition
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Delivery'      
+                
+  /api/v2/company/delivery-requirement:
+    get:
+      tags:
+        - Company parameters
+      description: Retourne les conditions de livraison
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryRequirement'  
+                
+  /api/v2/subscriptions-models:
+    get:
+      tags:
+        - Subscription Models
+      description: Returns subscription models
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionModels'   
+    post:
+      tags:
+        - Subscription Models
+      description: Add subscription models
+      requestBody:
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionModelPost'  
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectAdded'   
+        '422':
+          description: Duplicate key
+    put:
+      tags:
+        - Subscription Models
+      description: Edit subscription models
+      requestBody:
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionModelPut' 
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectEdited'   
+
+
+components:
+  schemas:
+  
+    ObjectAdded:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: "Object added."
+
+        id:
+          type: integer
+          example: 36    
+          
+    ObjectEdited:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: "Object edited."
+
+        id:
+          type: integer
+          example: 36    
+          
+    Articles:
+      type: object
+      properties:
+        code: 
+          type: integer
+          example: 200
+        data: 
+          type: array
+          items: 
+            type: object
+            properties: 
+              reference: 
+                type: string
+              designation: 
+                type: string
+          example:
+            - reference: BAAR01
+              designation: Bague Argent
+            - reference: BAOR01
+              designation: Bague Or et pierres
+        items: 
+          type: integer
+          example: 2
+          
+    Customer:
+      type: object
+      properties:
+        code: 
+          type: integer
+          example: 200
+        data: 
+          type: array
+          items: 
+            type: object
+            properties: 
+              id: 
+                type: string
+              intitule: 
+                type: string
+          example:
+            - id: BAGUES
+              intitule: Bague's en or
+            - id: CARAT
+              intitule: Carat S.a.r.l
+            - id: CERAM
+              intitule: Horlogerie Ceram
+        items: 
+          type: integer
+          example: 3
+          
+    CustomerDetail:
+      type: object
+      properties:
+        code: 
+          type: integer
+          example: 200
+        data: 
+          type: object
+          properties: 
+            id: 
+              type: string
+              example: BAGUES
+            intitule: 
+              type: string
+              example: Bague's en or
+            abrege: 
+              type: string
+              example: Bague's en or
+            adresse: 
+              type: string
+              example: Rue tête dOr
+            complement: 
+              type: string
+              example: BP 65993
+            code_postal: 
+              type: string
+              example: 57000
+            ville: 
+              type: string
+              example: Metz
+            pays: 
+              type: string
+              example: France
+            code_region: 
+              type: string
+              example: Lorraine
+            compte_collectif: 
+              type: string
+              example: 4110000
+            siret: 
+              type: string
+              example: 02556852465474
+            categorie_comptable: 
+              type: integer
+              example: 1
+            email: 
+              type: string
+              example: bagues@bagues.fr
+            contacts: 
+              type: array
+              items: 
+                type: object
+                properties: 
+                  id: 
+                    type: integer
+                    example: 1
+                  nom: 
+                    type: string
+                    example: ZHIA
+                  prenom: 
+                    type: string
+                    example: Estéban
+                  service: 
+                    type: integer
+                    example: 3
+                  fonction: 
+                    type: string
+                    example: Comptable
+                  email: 
+                    type: string
+                    example: zhia@bagues.fr
+                  type: 
+                    type: string
+                    example: 1
+            livraisons: 
+              type: array
+              items: 
+                type: object
+                properties: 
+                  id: 
+                    type: integer
+                    example: 1
+                  intitule: 
+                    type: string
+                    example: Bague's en or
+                  adresse: 
+                    type: string
+                    example: Rue tête dOr
+                  complemement: 
+                    type: string
+                    example: BP 65993
+                  code_postal: 
+                    type: string
+                    example: 57000
+                  ville: 
+                    type: string
+                    example: METZ
+                  code_region: 
+                    type: string
+                    example: Lorraine
+                  pays: 
+                    type: string
+                    example: France
+                  contact: 
+                    type: string
+                    example: Mr Or
+                  telephone: 
+                    type: string
+                    example: 06 65 87 00 00
+                  email: 
+                    type: string
+                    example: bagues@bagues.fr
+                  commentaire: 
+                    type: string
+                    example: ""
+                  expedition: 
+                    type: integer
+                    example: 1
+                  condition: 
+                    type: integer
+                    example: 1
+                  principal: 
+                    type: integer
+                    example: 1
+            banque_principale: 
+              type: object
+              properties: 
+                code_banque: 
+                  type: string
+                  example: 11111
+                guichet: 
+                  type: string
+                  example: 22222
+                compte: 
+                  type: string
+                  example: 33333333333
+                cle: 
+                  type: string
+                  example: 91
+                bic: 
+                  type: string
+                  example: BGLEFR54654
+                iban: 
+                  type: string
+                  example: FR7611111222223333333333391
+                  
+    CustomerPost:
+      type: object
+      required:
+        - id
+        - intitule
+        - abrege
+        - adresse
+        - complement
+        - code_postal
+        - ville
+        - pays
+        - code_region
+        - compte_collectif
+        - siret
+        - categorie_comptable
+        - email
+        - banque_principale
+      properties:
+        id: 
+          type: string
+          minLength: 1
+          maxLength: 17
+          description: "Id du client, ne doit pas être présent dans la base Sage"
+          example: NEOCLI
+        intitule: 
+          type: string
+          description: Intitulé
+          minLength: 1
+          maxLength: 69
+          example: Neo Client
+        abrege: 
+          type: string
+          description: Abrégé
+          minLength: 1
+          maxLength: 17
+          example: Neo Client
+        adresse: 
+          type: string
+          description: Adresse
+          maxLength: 35
+          example: BOULEVARD RAYMOND SPLINGARD
+        complement: 
+          type: string
+          description: Complément d'adresse
+          maxLength: 35
+          example: Complément
+        code_postal: 
+          type: string
+          description: Code postal
+          maxLength: 9
+          example: 62230
+        ville: 
+          type: string
+          description: Ville
+          maxLength: 35
+          example: OUTREAU
+        pays: 
+          type: string
+          description: Pays
+          maxLength: 35
+          example: France
+        code_region: 
+          type: string
+          description: Code région
+          maxLength: 25
+          example: ""
+        compte_collectif: 
+          type: string 
+          description: "Identifiant du compte, champ `compte_general` retournée par `GET /api/v2/company/chart-of-accounts`"
+          maxLength: 35
+          example: 41100000
+        siret: 
+          type: string
+          description: Siret
+          maxLength: 14
+          example: 409238102
+        categorie_comptable: 
+          type: integer
+          minimum: 1
+          maximum: 10
+          description: "Identifiant catégorie comptable, champ `id` retournée par `GET /api/v2/company/accounting-categories`"
+          example: 1
+        email: 
+          type: string
+          description: Adresse e-mail
+          example: cli@neoclif.fr
+        banque_principale: 
+          type: object
+          required: 
+            - code_banque
+            - guichet
+            - compte
+            - cle
+            - bic
+          properties: 
+            code_banque: 
+              type: string
+              maxLength: 14
+              description: Code banque
+              example: 02336
+            guichet: 
+              type: string
+              maxLength: 17
+              description: Code guichet
+              example: 45122
+            compte: 
+              type: string
+              maxLength: 35
+              description: Numéro de compte
+              example: 05558708063
+            cle: 
+              type: string
+              maxLength: 3
+              description: Clef
+              example: 93
+            bic: 
+              type: string
+              maxLength: 11
+              description: Code BIC
+              example: CRLYFR87987
+              
+    CustomerPut:
+      type: object
+      required:
+        - id
+        - intitule
+        - adresse
+        - complement
+        - code_postal
+        - ville
+        - pays
+        - code_region
+        - compte_collectif
+        - siret
+        - categorie_comptable
+        - email
+        - banque_principale
+      properties:
+        id: 
+          type: string
+          minLength: 1
+          maxLength: 17
+          description: "Id du client, champ `id` retournée par `GET /api/v2/customers`"
+          example: NEOCLI
+        intitule: 
+          type: string
+          description: Intitulé
+          minLength: 1
+          maxLength: 69
+          example: Neo Client
+        adresse: 
+          type: string
+          description: Adresse
+          maxLength: 35
+          example: BOULEVARD RAYMOND SPLINGARD
+        complement: 
+          type: string
+          description: Complément d'adresse
+          maxLength: 35
+          example: Complément
+        code_postal: 
+          type: string
+          description: Code postal
+          maxLength: 9
+          example: 62230
+        ville: 
+          type: string
+          description: Ville
+          maxLength: 35
+          example: OUTREAU
+        pays: 
+          type: string
+          description: Pays
+          maxLength: 35
+          example: France
+        code_region: 
+          type: string
+          description: Code région
+          maxLength: 25
+          example: ""
+        compte_collectif: 
+          type: string 
+          description: "Identifiant du compte, champ `compte_general` retournée par `GET /api/v2/company/chart-of-accounts`"
+          maxLength: 35
+          example: 41100000
+        siret: 
+          type: string
+          description: Siret
+          maxLength: 14
+          example: 409238102
+        categorie_comptable: 
+          type: integer
+          minimum: 1
+          maximum: 10
+          description: "Identifiant catégorie comptable, champ `id` retournée par `GET /api/v2/company/accounting-categories`"
+          example: 1
+        email: 
+          type: string
+          description: Adresse e-mail
+          example: cli@neoclif.fr
+        banque_principale: 
+          type: object
+          required: 
+            - code_banque
+            - guichet
+            - compte
+            - cle
+            - bic
+          properties: 
+            code_banque: 
+              type: string
+              maxLength: 14
+              description: Code banque
+              example: 02336
+            guichet: 
+              type: string
+              maxLength: 17
+              description: Code guichet
+              example: 45122
+            compte: 
+              type: string
+              maxLength: 35
+              description: Numéro de compte
+              example: 05558708063
+            cle: 
+              type: string
+              maxLength: 3
+              description: Clef
+              example: 93
+            bic: 
+              type: string
+              maxLength: 11
+              description: Code BIC
+              example: CRLYFR87987
+              
+    ContactPost:
+      type: object
+      required:
+        - nom
+        - prenom
+        - service
+        - fonction
+        - email
+        - type
+      properties:
+        nom:
+          type: string
+          description: Nom du contact
+          example: Dupont
+        prenom:
+          type: string
+          description: Prénom du contact
+          example: Alice
+        service:
+          type: integer
+          description: "Identifiant service, champ `id` retournée par `GET /api/v2/company/departments`"
+        fonction:
+          type: string
+          description: Fonction du contact
+          example: "Directrice Commerciale"
+        email:
+          type: string
+          description: Adresse e-mail du contact
+          example: "adupont@neo.fr"
+        type:
+          type: integer
+          description: "Identifiant type de contact, champ `id` retournée par `GET /api/v2/company/type-of-contacts`"
+          example: 1
+
+    ContactPut:
+      type: object
+      required:
+        - id
+        - nom
+        - prenom
+        - service
+        - fonction
+        - email
+        - type
+      properties:
+        id:
+          type: integer
+          description: "Identifiant service, champ `contacts.id` retournée par `GET /api/v2/customers`"
+        nom:
+          type: string
+          description: Nom du contact
+          example: Dupont
+        prenom:
+          type: string
+          description: Prénom du contact
+          example: Alice
+        service:
+          type: integer
+          description: "Identifiant service, champ `id` retournée par `GET /api/v2/company/departments`"
+        fonction:
+          type: string
+          description: Fonction du contact
+          example: "Directrice Commerciale"
+        email:
+          type: string
+          description: Adresse e-mail du contact
+          example: "adupont@neo.fr"
+        type:
+          type: integer
+          description: "Identifiant type de contact, champ `id` retournée par `GET /api/v2/company/type-of-contacts`"
+          example: 1      
+          
+    DeliveryPost:
+      type: object
+      required:
+        - intitule
+        - adresse
+        - complement
+        - code_postal
+        - ville
+        - code_region
+        - pays
+        - contact
+        - expedition
+        - condition
+        - telephone
+        - email
+      properties:
+        intitule: 
+          type: string
+          description: Intitulé de l'adresse
+          example: "Adresse de livraison principale"
+          maxLength: 69
+        adresse:
+          type: string
+          description: Adresse
+          example: "6 rue de la liberté"
+          maxLength: 35
+        complement:
+          type: string
+          description: Complémtent d'adresse
+          example: ""
+          maxLength: 35        
+        code_postal:
+          type: string
+          description: Code postal
+          maxLength: 9
+          example: "80290"
+        ville:
+          type: string
+          description: Ville
+          maxLength: 35
+          example: "Amiens"
+        code_region:
+          type: string
+          description: Code de la région
+          maxLength: 25
+          example: "Picardie"
+        pays:
+          type: string
+          description: Pays
+          maxLength: 35
+          example: France
+        contact:
+          type: string
+          description: Contact
+          maxLength: 35
+          example: M. Durant
+        expedition: 
+          type: integer
+          description: "Identifiant du mode d'expédition, champ `id` retournée par `GET /api/v2/company/delivery`"
+          minimum: 1
+          maximum: 50
+          example: 1
+        condition: 
+          type: integer
+          description: "Identifiant de la condition de livraison, champ `id` retournée par `GET /api/v2/company/delivery-requirement`"
+          minimum: 1
+          maximum: 30
+          example: 1      
+        telephone:
+          type: string
+          description: Numéro de téléphone
+          maxLength: 21
+          example : 06.55.22.23.12
+        email:
+          type: string
+          description: Adresse e-mail
+          maxLength: 69
+          example: dupont@bijou.fr
+          
+    DeliveryPut:
+      type: object
+      required:
+        - id
+        - intitule
+        - adresse
+        - complement
+        - code_postal
+        - ville
+        - code_region
+        - pays
+        - contact
+        - expedition
+        - condition
+        - telephone
+        - email
+      properties:
+        id:
+          type: integer
+          description: "Identifiant de l'adresse de livraison, champ `livraisons.id` retournée par `GET /api/v2/customers/{customerId}`"
+          example: 456
+        intitule: 
+          type: string
+          description: Intitulé de l'adresse
+          example: "Adresse de livraison principale"
+          maxLength: 69
+        adresse:
+          type: string
+          description: Adresse
+          example: "6 rue de la liberté"
+          maxLength: 35
+        complement:
+          type: string
+          description: Complémtent d'adresse
+          example: ""
+          maxLength: 35        
+        code_postal:
+          type: string
+          description: Code postal
+          maxLength: 9
+          example: "80290"
+        ville:
+          type: string
+          description: Ville
+          maxLength: 35
+          example: "Amiens"
+        code_region:
+          type: string
+          description: Code de la région
+          maxLength: 25
+          example: "Picardie"
+        pays:
+          type: string
+          description: Pays
+          maxLength: 35
+          example: France
+        contact:
+          type: string
+          description: Contact
+          maxLength: 35
+          example: M. Durant
+        expedition: 
+          type: integer
+          description: "Identifiant du mode d'expédition, champ `id` retournée par `GET /api/v2/company/delivery`"
+          minimum: 1
+          maximum: 50
+          example: 1
+        condition: 
+          type: integer
+          description: "Identifiant de la condition de livraison, champ `id` retournée par `GET /api/v2/company/delivery-requirement`"
+          minimum: 1
+          maximum: 30
+          example: 1      
+        telephone:
+          type: string
+          description: Numéro de téléphone
+          maxLength: 21
+          example : 06.55.22.23.12
+        email:
+          type: string
+          description: Adresse e-mail
+          maxLength: 69
+          example: dupont@bijou.fr
+          
+    Numbering:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              intitule:
+                type: string
+          example:
+            - id: 1
+              intitule: "N° Facture"
+            - id: 2
+              intitule: "N° Avoir"
+        items:
+          type: integer
+          example: 2
+          
+    Departments:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              intitule:
+                type: string
+          example:
+            - id: 1
+              intitule: "Direction"
+            - id: 2
+              intitule: "Commercial"
+            - id: 3
+              intitule: "Comptabilité"
+            - id: 4
+              intitule: "Juridique"
+        items:
+          type: integer
+          example: 4
+
+    ContactsType:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              intitule:
+                type: string
+          example:
+            - id: 1
+              intitule: "Interlocuteur"
+            - id: 2
+              intitule: "Avocat"
+            - id: 3
+              intitule: "Huissier"
+            - id: 4
+              intitule: "Greffier"
+            - id: 5
+              intitule: "Représentant des créanciers"
+        items:
+          type: integer
+          example: 5
+          
+    AccountingCategorie:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              categorie:
+                type: string
+          example:
+            - id: 1
+              categorie: "Ventes France"
+            - id: 2
+              categorie: "Ventes export"
+            - id: 3
+              categorie: "Ventes DOM TOM"
+        items:
+          type: integer
+          example: 3    
+          
+    CoA:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              compte_general:
+                type: string
+              categorie:
+                type: string
+          example:
+            - compte_general: "4110000"
+              categorie: "Collectif clients"
+            - compte_general: "4010000"
+              categorie: "Collectif fournisseurs"
+        items:
+          type: integer
+          example: 2    
+          
+    Settlement:  
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              intitule:
+                type: string
+          example:
+            - id: 1
+              intitule: "Chèque"
+            - id: 2
+              intitule: "Virement"
+            - id: 3
+              intitule: "Espèces"
+            - id: 4
+              intitule: "Prélèvement"
+        items:
+          type: integer
+          example: 4     
+          
+    Delivery:  
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              intitule:
+                type: string
+          example:
+            - id: 1
+              intitule: "Chronoposte"
+            - id: 2
+              intitule: "Colissimo"
+            - id: 3
+              intitule: "Express"
+        items:
+          type: integer
+          example: 3             
+          
+    DeliveryRequirement:  
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              intitule:
+                type: string
+          example:
+            - id: 1
+              intitule: "Sans conditions particulières"
+            - id: 2
+              intitule: "Intro. Franco le long du navire"
+            - id: 3
+              intitule: "Exp. Franco le long du navire"
+        items:
+          type: integer
+          example: 3          
+    SubscriptionsGet:
+      type: object
+      properties:
+        code: 
+          type: integer
+          example: 200
+        data: 
+          type: array
+          items: 
+            type: object
+            properties: 
+              id: 
+                type: integer
+                example: 4
+              client: 
+                type: string
+                example: DIAMA
+              modele: 
+                type: string
+                example: ACCESSOIRE
+              debut: 
+                type: string
+                example: 20180116000000000
+              fin: 
+                type: string
+                example: 20190116000000000
+        items: 
+          type: integer
+          example: 1
+          
+    SubscriptionsPost:
+      type: object
+      required:
+        - modele
+        - client
+        - intitule
+        - contrat
+        - date_debut
+        - date_fin
+        - base_calcul
+      properties:
+        modele: 
+          type: string
+          description: "Code du modèle d'abonnement, champ `code` retournée par `GET /api/v2/subscriptions-models`"
+          example: ACCESSOIRE
+        client: 
+          type: string
+          description: "Id du client, champ `id` retournée par `GET /api/v2/customers`"
+          example: BAGUES
+        intitule: 
+          type: string
+          description: Intitulé de l'abonnement
+          maxLength: 35
+          example: Mon abonnement n°1
+        contrat: 
+          type: string
+          description: Contrat de l'abonnement
+          maxLength: 35
+          example: Contrat 1024
+        date_debut: 
+          type: string
+          description: Date de début de l'abonnement format `YYYYMMDD`
+          example: 20221015
+        date_fin: 
+          type: string
+          description: Date de fin de l'abonnement format `YYYYMMDD`
+          example: 20231015
+        base_calcul: 
+          type: integer
+          enum: [0,1,2]
+          description: >
+            Base de calcul des échéances:
+             * `0` - Date de document
+             * `1` - Début de périodicité
+             * `2` - Fin de périodicité
+          example: 0
+        conditions_payement: 
+          type: array
+          items: 
+            type: object
+            required:
+              - valeur
+              - jour
+              - le
+              - reglement_id
+            properties: 
+              valeur: 
+                type: number
+                description: Valeur du montant de la répartition
+                example: 124.24
+              jour: 
+                type: integer
+                description: Nombre de jours
+                minimum: 0
+                maximum: 999
+                example: 160
+              le: 
+                type: integer
+                description: Jours de tombée 
+                minimum: 1
+                maximum: 31
+                example: 12
+              reglement_id: 
+                type: integer
+                description: "Id du mode de réglement, champ `id` retournée par `GET /api/v2/payment-methods`"
+                example: 1
+        articles: 
+          type: array
+          items: 
+            type: object
+            required:
+              - reference
+              - designation
+              - quantite
+              - prixHT
+              - remise
+              - remiseType
+            properties: 
+              reference: 
+                type: string
+                description: "Référence de l'article, champ `reference` retournée par `GET /api/v2/articles`"
+                example: SVCTETAN
+              designation: 
+                type: string
+                description: Désignation de la ligne article (Peut être différent de la désignation de l'article)
+                maxLength: 69
+                example: Bague en or
+              quantite: 
+                type: integer
+                description: Quantité
+                example: 6
+              prixHT: 
+                type: number
+                description: Prix Hors Taxe
+                example: 12.65
+              remise: 
+                type: integer
+                description: Montant de la remise
+                minimum: 0
+                example: 10
+              remiseType: 
+                type: integer
+                enum: [0,1]
+                description: >
+                  Type de remise:
+                   * `0` - Montant
+                   * `1` - Pourcentage
+                example: 1
+
+    SubscriptionModels:  
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                example: "ACCESSOIRE"
+              intitule:
+                type: string
+                example: "Fourniture d'accessoires bijoutiers"
+              duree: 
+                type: integer
+                example: 1
+              dureeType:
+                type: integer
+                example: 3
+              reconduction:
+                type: integer
+                example: 1
+              delai:
+                type: integer
+                example: 1
+              delaiType:
+                type: integer
+                example: 1
+              souche:
+                type: integer
+                example: 1
+              periodicite:
+                type: integer
+                example: 2
+              periodiciteType:
+                type: integer
+                example: 2
+              joursGen:
+                type: integer
+                example: 0
+              joursGenType:
+                type: integer
+                example: 0
+              articles: 
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    reference:
+                      type: string
+                    designation: 
+                      type: string 
+                    quantite:
+                      type: integer
+                    prixHT:
+                      type: number
+                  example:
+                    - id : 1
+                      reference: "CHSR10"
+                      designation: "Chaînette de sûreté"
+                      quantite: 50
+                      prixHT: 24.13
+                    - id : 1
+                      reference: "CHFE01"
+                      designation: "Fermoir cliquet"
+                      quantite: 50
+                      prixHT: 12.56
+                    - id : 1
+                      reference: "ZPORT"
+                      designation: "Port & frais d'expédition"
+                      quantite: 1
+                      prixHT: 125
+                  
+        items:
+          type: integer
+          example: 1    
+          
+    DeliveryOrderPost:
+      type: object
+      required: 
+        - reference
+        - client
+        - date_livraison
+        - echeances
+        - articles
+      properties:
+        reference: 
+          type: string
+          description: "Référence du document"
+          maxLength: 17
+          example: Ma référence
+        client: 
+          type: string
+          description: "Id du client, champ `id` retournée par `GET /api/v2/customers`"
+          example: BAGUES
+        date_livraison: 
+          type: string
+          description: Date de livraison au format `YYYYMMDD`
+          example: 20211020
+        echeances: 
+          type: array
+          items: 
+            type: object
+            required:
+              - montant
+              - reglement_id
+              - date
+            properties: 
+              montant: 
+                type: number
+                description: Montant
+                minimum: 0
+                example: 2.12
+              reglement_id: 
+                type: integer
+                description: "Id du mode de réglement, champ `id` retournée par `GET /api/v2/company/payment-methods`"
+                example: 2
+              date: 
+                type: string
+                description: Date au format `YYYYMMDD`
+                example: 20211020
+        articles: 
+          type: array
+          items: 
+            type: object
+            required:
+              - reference
+              - designation
+              - quantite
+              - prixHT
+              - remise
+              - remiseType
+            properties: 
+              reference: 
+                type: string
+                description: "Référence de l'article, champ `reference` retournée par `GET /api/v2/articles`"
+                example: SVCTETAN
+              designation: 
+                type: string
+                description: Désignation de la ligne article (Peut être différent de la désignation de l'article)
+                maxLength: 69
+                example: Bague en or
+              quantite: 
+                type: integer
+                description: Quantité
+                example: 6
+              prixHT: 
+                type: number
+                description: Prix Hors Taxe
+                example: 12.65
+              remise: 
+                type: integer
+                description: Montant de la remise
+                minimum: 0
+                example: 10
+              remiseType: 
+                type: integer
+                enum: [0,1]
+                description: >
+                  Type de remise:
+                   * `0` - Montant
+                   * `1` - Pourcentage
+                example: 1
+
+    SubscriptionModelPut:
+      type: object
+      required: 
+        - id
+        - intitule
+        - reconduction
+        - delai
+        - delaiType
+        - souche
+        - periodicite
+        - periodiciteType
+        - joursGen
+        - joursGenType
+        - articles
+        
+      properties:
+        id: 
+          type: integer
+          description: "Identifiant du Modele, champ `id` retournée par `GET /api/v2/subscriptions-models`"
+          example: "MODELE_A"
+        intitule:
+          type: string
+          maxLength: 35
+          description: "Intitulé"
+          example: "Nouveau modèle"
+        reconduction:
+          type: integer
+          enum: [0,1,2]
+          description: >
+            Reconduction de l’abonnement:
+             * `0` - Aucune
+             * `1` - Tacite
+             * `2` - A confirmer
+          example: 1
+        delai:
+          type: integer
+          minimum: 0
+          maximum: 999
+          description: "Délai de préavis"
+          example: 1
+        delaiType:
+          type: integer
+          enum: [0,1,2,3]
+          description: >
+            Type de delais:
+             * `0` - Jours
+             * `1` - Semaine
+             * `2` - Mois
+             * `3` - Année
+          example: 1
+        souche:
+          type: integer
+          description: > 
+            Souche, champ `id` retournée par `GET /api/v2/numbering`.
+          example: 1
+
+        periodicite:
+          type: integer
+          minimum: 0
+          maximum: 999
+          description: "Périodicité"
+          example: 2
+        periodiciteType:
+          type: integer
+          enum: [0,1,2,3,4,5]
+          description: >
+            Type de période:
+             * `0` - Jours
+             * `1` - Semaine
+             * `2` - Mois
+             * `3` - Année
+             * `4` - Mois civil
+             * `5` - Année civile
+          example: 2
+        joursGen:
+          type: integer
+          minimum: -99
+          maximum: 999
+          description: "Nombre de jours pour le calcul des dates de génération"
+          example: 0
+        joursGenType:
+          type: integer
+          enum: [0,1]
+          description: >
+            Type pour le calcul des dates de livraison:
+             * `0` - Date début
+             * `1` - Date fin
+          example: 0
+        articles: 
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - designation
+              - quantite
+              - prixHT
+            properties:
+              id:
+                type: string
+                description: > 
+                  Identifiant de la ligne article, champ `articles.id` retournée par `GET /api/v2/subscriptions-models`.
+              designation: 
+                type: string 
+                maxLength: 69
+                description: "Désignation de l'article"
+              quantite:
+                type: integer
+                description: "Quantité"
+              prixHT:
+                type: number
+                description: "Prix Hors Taxe"
+            example:
+              - reference: "CHSR10"
+                designation: "Chaînette de sûreté"
+                quantite: 50
+                prixHT: 24.13
+              - reference: "CHFE01"
+                designation: "Fermoir cliquet"
+                quantite: 50
+                prixHT: 12.56
+              - reference: "ZPORT"
+                designation: "Port & frais d'expédition"
+                quantite: 1
+                prixHT: 125
+    SubscriptionModelPost:
+      type: object
+      required: 
+        - code
+        - intitule
+        - reconduction
+        - delai
+        - delaiType
+        - souche
+        - periodicite
+        - periodiciteType
+        - joursGen
+        - joursGenType
+        - articles
+        
+      properties:
+        code: 
+          type: string
+          description: "Code du modèle, ne doit pas être présent dans la base de donnée Sage"
+          maxLength: 10
+          example: "MODELE_A"
+        intitule:
+          type: string
+          maxLength: 35
+          description: "Intitulé"
+          example: "Nouveau modèle"
+        reconduction:
+          type: integer
+          enum: [0,1,2]
+          description: >
+            Reconduction de l’abonnement:
+             * `0` - Aucune
+             * `1` - Tacite
+             * `2` - A confirmer
+          example: 1
+        delai:
+          type: integer
+          minimum: 0
+          maximum: 999
+          description: "Délai de préavis"
+          example: 1
+        delaiType:
+          type: integer
+          enum: [0,1,2,3]
+          description: >
+            Type de delais:
+             * `0` - Jours
+             * `1` - Semaine
+             * `2` - Mois
+             * `3` - Année
+          example: 1
+        souche:
+          type: integer
+          description: > 
+            Souche, champ `id` retournée par `GET /api/v2/numbering`.
+          example: 1
+
+        periodicite:
+          type: integer
+          minimum: 0
+          maximum: 999
+          description: "Périodicité"
+          example: 2
+        periodiciteType:
+          type: integer
+          enum: [0,1,2,3,4,5]
+          description: >
+            Type de période:
+             * `0` - Jours
+             * `1` - Semaine
+             * `2` - Mois
+             * `3` - Année
+             * `4` - Mois civil
+             * `5` - Année civile
+          example: 2
+        joursGen:
+          type: integer
+          minimum: -99
+          maximum: 999
+          description: "Nombre de jours pour le calcul des dates de génération"
+          example: 0
+        joursGenType:
+          type: integer
+          enum: [0,1]
+          description: >
+            Type pour le calcul des dates de livraison:
+             * `0` - Date début
+             * `1` - Date fin
+          example: 0
+        articles: 
+          type: array
+          items:
+            type: object
+            required:
+              - reference
+              - designation
+              - quantite
+              - prixHT
+            properties:
+              reference:
+                type: string
+                description: > 
+                  Référence de l'article, champ `reference` retournée par `GET /api/v2/articles`.
+              designation: 
+                type: string 
+                maxLength: 69
+                description: "Désignation de l'article"
+              quantite:
+                type: integer
+                description: "Quantité"
+              prixHT:
+                type: number
+                description: "Prix Hors Taxe"
+            example:
+              - reference: "CHSR10"
+                designation: "Chaînette de sûreté"
+                quantite: 50
+                prixHT: 24.13
+              - reference: "CHFE01"
+                designation: "Fermoir cliquet"
+                quantite: 50
+                prixHT: 12.56
+              - reference: "ZPORT"
+                designation: "Port & frais d'expédition"
+                quantite: 1
+                prixHT: 125
+
+        
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
