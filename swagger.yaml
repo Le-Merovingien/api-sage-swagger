@@ -191,7 +191,7 @@ paths:
                 $ref: '#/components/schemas/ObjectAdded'
         '422':
           description: Duplicate key
-  /api/v2/customers/contact:
+  /api/v2/customers/contacts:
     put:
       tags:
         - Customers Contacts
@@ -227,7 +227,7 @@ paths:
                 $ref: '#/components/schemas/ObjectEdited'
         '422':
           description: Duplicate key
-  /api/v2/customers/contact/{contactId}:
+  /api/v2/customers/contacts/{contactId}:
     delete:
       tags:
         - Customers Contacts
