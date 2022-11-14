@@ -1780,6 +1780,9 @@ components:
           items:
             type: object
             properties:
+              id:
+                type: integer
+                example: 164
               code:
                 type: string
                 example: ACCESSOIRE
