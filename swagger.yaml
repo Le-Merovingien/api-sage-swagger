@@ -3,7 +3,8 @@ info:
   title: Sage API
   description: |-
     ---
-
+    Error informations :
+    - [Sage API repository](https://github.com/Le-Merovingien/api-sage-swagger)
     API Sage 100c
   version: 2.0.0
 tags:
@@ -39,7 +40,7 @@ paths:
 
         Si un utilisateur est sur la fenêtre des abonnements dans sage
         (Traitement > Abonnements > Abonnement clients), la table des
-        abonnements est vérrouillé, il n'est donc pas possible d'effectuer la
+        abonnements est verrouillé, il n'est donc pas possible d'effectuer la
         suppression d'un abonnement. Dans ce cas, l'intitulé de l'abonnement est
         modifié en *À supprimer*.
       requestBody:
