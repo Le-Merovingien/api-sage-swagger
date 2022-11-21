@@ -618,6 +618,15 @@ components:
             email:
               type: string
               example: bagues@bagues.fr
+            informations_libres:
+              type: object
+              properties:
+                finess:
+                  type: string
+                  example: "123456"
+                typologie_commerciale:
+                  type: string
+                  example: "Pharmacie"
             contacts:
               type: array
               items:
@@ -839,6 +848,15 @@ components:
               maxLength: 11
               description: Code BIC
               example: CRLYFR87987
+        informations_libres:
+          type: object
+          properties:
+            finess:
+              type: string
+              example: "123456"
+            typologie_commerciale:
+              type: string
+              example: "Pharmacie"
     CustomerPut:
       type: object
       required:
@@ -956,6 +974,15 @@ components:
               maxLength: 11
               description: Code BIC
               example: CRLYFR87987
+        informations_libres:
+          type: object
+          properties:
+            finess:
+              type: string
+              example: "123456"
+            typologie_commerciale:
+              type: string
+              example: "Pharmacie"
     ContactPost:
       type: object
       required:
