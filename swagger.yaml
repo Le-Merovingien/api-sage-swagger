@@ -6,7 +6,7 @@ info:
     Error informations :
     - [Sage API repository](https://github.com/Le-Merovingien/api-sage-swagger)
     API Sage 100c
-  version: 2.0.2
+  version: 2.0.3
 tags:
   - name: Articles
   - name: Company parameters
@@ -857,6 +857,56 @@ components:
             typologie_commerciale:
               type: string
               example: "Pharmacie"
+        conditions_paiement:
+          type: array
+          items:
+            type: object
+            required:
+              - valeur
+              - jour
+              - le
+              - reglement_id
+              - type_repart
+              - condition
+            properties:
+              valeur:
+                type: number
+                description: Valeur du montant de la répartition
+                example: 124.24
+              jour:
+                type: integer
+                description: Nombre de jours
+                minimum: 0
+                maximum: 999
+                example: 160
+              le:
+                type: integer
+                description: Jours de tombée
+                minimum: 1
+                maximum: 31
+                example: 12
+              reglement_id:
+                type: integer
+                description: >-
+                  Id du mode de réglement, champ `id` retourné par `GET
+                  /api/v2/payment-methods`
+                example: 1
+              type_repart:
+                type: integer
+                description: |
+                  Type répartition :
+                   * `0` - Pourcentage
+                   * `1` - Equilibre
+                   * `2` - Montant
+              condition:
+                type: integer
+                description: |
+                  Conditions :
+                   * `0` - Jour net
+                   * `1` - Fin mois civil
+                   * `2` - Fin mois
+                   * null - pour valeur null
+
     CustomerPut:
       type: object
       required:
@@ -1499,6 +1549,7 @@ components:
         - date_debut
         - date_fin
         - base_calcul
+        - souche_id
       properties:
         modele:
           type: string
@@ -1506,6 +1557,11 @@ components:
             Code du modèle d'abonnement, champ `code` retourné par `GET
             /api/v2/subscriptions-models`
           example: ACCESSOIRE
+        souche_id:
+          type: integer
+          description: |
+            Souche, champ `id` retourné par `GET /api/v2/numbering`.
+          example: 1
         client:
           type: string
           description: Id du client, champ `id` retourné par `GET /api/v2/customers`
@@ -1540,7 +1596,7 @@ components:
              * `1` - Début de périodicité
              * `2` - Fin de périodicité
           example: 0
-        conditions_payement:
+        conditions_paiement:
           type: array
           items:
             type: object
@@ -1879,7 +1935,6 @@ components:
         - reference
         - client
         - date_livraison
-        - echeances
         - articles
       properties:
         reference:
