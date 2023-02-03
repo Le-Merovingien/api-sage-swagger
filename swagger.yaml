@@ -1936,12 +1936,18 @@ components:
         - client
         - date_livraison
         - articles
+        - souche_id
       properties:
         reference:
           type: string
           description: Référence du document
           maxLength: 17
           example: Ma référence
+        souche_id:
+          type: integer
+          description: |
+            Souche, champ `id` retourné par `GET /api/v2/numbering`.
+          example: 1
         client:
           type: string
           description: Id du client, champ `id` retourné par `GET /api/v2/customers`
