@@ -882,7 +882,7 @@ components:
               le:
                 type: integer
                 description: Jours de tombée
-                minimum: 1
+                minimum: 0
                 maximum: 31
                 example: 12
               reglement_id:
@@ -1619,7 +1619,7 @@ components:
               le:
                 type: integer
                 description: Jours de tombée
-                minimum: 1
+                minimum: 0
                 maximum: 31
                 example: 12
               reglement_id:
@@ -1788,7 +1788,7 @@ components:
               le:
                 type: integer
                 description: Jours de tombée
-                minimum: 1
+                minimum: 0
                 maximum: 31
                 example: 12
               reglement_id:
