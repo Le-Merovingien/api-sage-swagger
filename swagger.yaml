@@ -350,7 +350,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ObjectAdded'
+                $ref: '#/components/schemas/ObjectAddedString'
         '422':
           description: Duplicate key
   /api/v2/articles:
@@ -523,6 +523,18 @@ components:
         id:
           type: integer
           example: 36
+    ObjectAddedString:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Object added.
+        id:
+          type: string
+          example: AAAAAAA
     ObjectEdited:
       type: object
       properties:
