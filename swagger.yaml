@@ -9,6 +9,7 @@ info:
   version: 2.0.3
 tags:
   - name: Articles
+  - name: Collaborater
   - name: Company parameters
   - name: Customers
   - name: Customers Contacts
@@ -20,6 +21,18 @@ tags:
 security:
   - x-api-key: []
 paths:
+  /api/v2/collaborater:
+    get:
+      tags:
+        - Collaborater
+      description: Returns subscription models
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collaborater'
   /api/v2/subscription-process:
     post:
       tags:
@@ -570,6 +583,36 @@ components:
         items:
           type: integer
           example: 3
+    Collaborater:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              nom:
+                type: string
+              prenom:
+                type: string
+          example:
+            - id: 1
+              nom: BRILLE
+              prenom: Carmen
+            - id: 2
+              nom: CHEVALIER
+              prenom: Eric
+            - id: 3
+              nom: DUCHAINE
+              prenom: Aurore
+        items:
+          type: integer
+          example: 3
     CustomerDetail:
       type: object
       properties:
@@ -618,6 +661,13 @@ components:
             email:
               type: string
               example: bagues@bagues.fr
+            collaborateur_id:
+              type: integer
+              description: >-
+                Identifiant du collaborateur, champ `id` retourné par `GET
+                /api/v2/collaborateur`
+                example: 1
+              example: 1
             informations_libres:
               type: object
               properties:
@@ -741,6 +791,7 @@ components:
         - categorie_comptable
         - email
         - banque_principale
+        - collaborateur_id
       properties:
         id:
           type: string
@@ -814,6 +865,12 @@ components:
           type: string
           description: Adresse e-mail
           example: cli@neoclif.fr
+        collaborateur_id:
+          type: integer
+          description: >-
+            Identifiant du collaborateur, champ `id` retourné par `GET
+            /api/v2/collaborateur`
+          example: 1
         banque_principale:
           type: object
           required:
@@ -923,6 +980,7 @@ components:
         - categorie_comptable
         - email
         - banque_principale
+        - collaborateur_id
       properties:
         id:
           type: string
@@ -990,6 +1048,13 @@ components:
           type: string
           description: Adresse e-mail
           example: cli@neoclif.fr
+        collaborateur_id:
+          type: integer
+          description: >-
+            Identifiant du collaborateur, champ `id` retourné par `GET
+            /api/v2/collaborateur`
+            example: 1
+          example: 1
         banque_principale:
           type: object
           required:
