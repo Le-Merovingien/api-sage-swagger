@@ -2002,6 +2002,8 @@ components:
         - date_livraison
         - articles
         - souche_id
+        - date_debut
+        - date_fin
       properties:
         reference:
           type: string
@@ -2021,6 +2023,14 @@ components:
           type: string
           description: Date de livraison au format `YYYYMMDD`
           example: 20211020
+        date_debut:
+          type: string
+          description: Date de début de l'abonnement format `YYYYMMDD`
+          example: 20221015
+        date_fin:
+          type: string
+          description: Date de fin de l'abonnement format `YYYYMMDD`
+          example: 20231015
         echeances:
           type: array
           items:
