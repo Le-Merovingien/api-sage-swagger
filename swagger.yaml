@@ -2103,6 +2103,10 @@ components:
                    * `0` - Montant
                    * `1` - Pourcentage
                 example: 1
+              texteComplementaire:
+                type: string
+                description: Note complémentaire lié à la ligne article
+                example: Mon texte complémantaire
     SubscriptionModelPut:
       type: object
       required:
