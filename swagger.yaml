@@ -1098,6 +1098,55 @@ components:
             typologie_commerciale:
               type: string
               example: "Pharmacie"
+        conditions_paiement:
+          type: array
+          items:
+            type: object
+            required:
+              - valeur
+              - jour
+              - le
+              - reglement_id
+              - type_repart
+              - condition
+            properties:
+              valeur:
+                type: number
+                description: Valeur du montant de la répartition
+                example: 124.24
+              jour:
+                type: integer
+                description: Nombre de jours
+                minimum: 0
+                maximum: 999
+                example: 160
+              le:
+                type: integer
+                description: Jours de tombée
+                minimum: 0
+                maximum: 31
+                example: 12
+              reglement_id:
+                type: integer
+                description: >-
+                  Id du mode de réglement, champ `id` retourné par `GET
+                  /api/v2/payment-methods`
+                example: 1
+              type_repart:
+                type: integer
+                description: |
+                  Type répartition :
+                   * `0` - Pourcentage
+                   * `1` - Equilibre
+                   * `2` - Montant
+              condition:
+                type: integer
+                description: |
+                  Conditions :
+                   * `0` - Jour net
+                   * `1` - Fin mois civil
+                   * `2` - Fin mois
+                   * null - pour valeur null
     ContactPost:
       type: object
       required:
