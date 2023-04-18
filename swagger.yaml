@@ -2111,6 +2111,7 @@ components:
         - souche_id
         - date_debut
         - date_fin
+        - collaborateur_id
       properties:
         reference:
           type: string
@@ -2138,6 +2139,13 @@ components:
           type: string
           description: Date de fin de l'abonnement format `YYYYMMDD`
           example: 20231015
+        collaborateur_id:
+          type: integer
+          description: >-
+            Identifiant du collaborateur, champ `id` retourné par `GET
+            /api/v2/collaborateur`
+            Dans le cas d'un bon de livraison, ce champs peut être mis à 0 pour ne pas renseigner de collaborateur.
+          example: 1
         echeances:
           type: array
           items:
