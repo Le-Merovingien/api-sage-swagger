@@ -6,7 +6,7 @@ info:
     Error informations :
     - [Sage API repository](https://github.com/Le-Merovingien/api-sage-swagger)
     API Sage 100c
-  version: 2.0.5
+  version: 2.0.7
 tags:
   - name: Articles
   - name: Collaborater
@@ -2106,6 +2106,7 @@ components:
       required:
         - reference
         - client
+        - date_document
         - date_livraison
         - articles
         - souche_id
@@ -2130,6 +2131,10 @@ components:
         date_livraison:
           type: string
           description: Date de livraison au format `YYYYMMDD`
+          example: 20211020
+        date_document:
+          type: string
+          description: Date du document au format `YYYYMMDD`, peut prendre la valeur null et dans ce cas la date serra celle en cours.
           example: 20211020
         date_debut:
           type: string
