@@ -6,7 +6,7 @@ info:
     Error informations :
     - [Sage API repository](https://github.com/Le-Merovingien/api-sage-swagger)
     API Sage 100c
-  version: 2.0.7
+  version: 2.0.8
 tags:
   - name: Articles
   - name: Collaborater
@@ -114,7 +114,10 @@ paths:
     post:
       tags:
         - Customers
-      description: Ajoute un client
+      description: >
+        Ajoute un client. 
+        Les champs obligatoires ne pouvant pas être vides sont les suivants : id, intitule, abrégé et compte_collectif. 
+        Les informations libres de type texte peuvent être ajoutée, pour cela, consultez le nom de l'information libre dans sage et utilisez le en clef dans le champs informations_libres
       requestBody:
         content:
           application/json:
@@ -133,7 +136,10 @@ paths:
     put:
       tags:
         - Customers
-      description: Modifit un client
+      description: >
+          Modifit un client. 
+          Les champs obligatoires ne pouvant pas être vides sont les suivants : id, intitule et compte_collectif. 
+          Les informations libres de type texte peuvent être ajoutée, pour cela, consultez le nom de l'information libre dans sage et utilisez le en clef dans le champs informations_libres
       requestBody:
         content:
           application/json:
@@ -838,18 +844,7 @@ components:
         - id
         - intitule
         - abrege
-        - adresse
-        - complement
-        - code_postal
-        - ville
-        - pays
-        - code_region
         - compte_collectif
-        - siret
-        - categorie_comptable
-        - email
-        - banque_principale
-        - collaborateur_id
       properties:
         id:
           type: string
@@ -1027,18 +1022,8 @@ components:
       required:
         - id
         - intitule
-        - adresse
-        - complement
-        - code_postal
-        - ville
-        - pays
-        - code_region
         - compte_collectif
-        - siret
-        - categorie_comptable
-        - email
-        - banque_principale
-        - collaborateur_id
+
       properties:
         id:
           type: string
@@ -1055,43 +1040,51 @@ components:
         adresse:
           type: string
           description: Adresse
+          minLength: 0
           maxLength: 35
           example: BOULEVARD RAYMOND SPLINGARD
         complement:
           type: string
           description: Complément d'adresse
+          minLength: 0
           maxLength: 35
           example: Complément
         code_postal:
           type: string
           description: Code postal
+          minLength: 0
           maxLength: 9
           example: 62230
         ville:
           type: string
           description: Ville
+          minLength: 0
           maxLength: 35
           example: OUTREAU
         pays:
           type: string
           description: Pays
+          minLength: 0
           maxLength: 35
           example: France
         code_region:
           type: string
           description: Code région
           maxLength: 25
+          minLength: 0
           example: ''
         compte_collectif:
           type: string
           description: >-
             Identifiant du compte, champ `compte_general` retourné par `GET
             /api/v2/company/chart-of-accounts`
+          minLength: 3
           maxLength: 35
           example: 41100000
         siret:
           type: string
           description: Siret
+          minLength: 0
           maxLength: 14
           example: 409238102
         categorie_comptable:
@@ -1106,6 +1099,8 @@ components:
           type: string
           description: Adresse e-mail
           example: cli@neoclif.fr
+          minLength: 0
+          maxLength: 69
         collaborateur_id:
           type: integer
           description: >-

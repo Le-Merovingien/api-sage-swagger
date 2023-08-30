@@ -1,4 +1,4 @@
-# Sage API _2.0.7_
+# Sage API _2.0.8_
 
 ## API Error structure :
 ```
