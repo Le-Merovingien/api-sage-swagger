@@ -6,7 +6,7 @@ info:
     Error informations :
     - [Sage API repository](https://github.com/Le-Merovingien/api-sage-swagger)
     API Sage 100c
-  version: 2.0.8
+  version: 2.0.9
 tags:
   - name: Articles
   - name: Collaborater
@@ -679,15 +679,36 @@ components:
             email:
               type: string
               example: bagues@bagues.fr
+            qualite:
+              type: string
+              example: Monsieur
+            interlocuteur:
+              type: string
+              example: Dupont
+            telephone:
+              type: string
+              example: 0122334455
+            telecopie:
+              type: string
+              example: 0199887766
+            tiers_payeur:
+              type: string
+              description: >-
+                Identifiant du tiers payeur, champ `id` retourné par `GET
+                /api/v2/customers`
+            code_ape:
+              type: string
+              example: 52.3A
             collaborateur_id:
               type: integer
               description: >-
                 Identifiant du collaborateur, champ `id` retourné par `GET
                 /api/v2/collaborateur`
-                example: 1
               example: 1
             informations_libres:
               type: object
+              description: >-
+                Liste des informations libres varie en fonction de la base Sage utilisée, dans cet exemple la base dispose des deux champs libres suivant sur la fiche client : finess et typologie_commerciale
               properties:
                 finess:
                   type: string
@@ -777,6 +798,9 @@ components:
                 code_banque:
                   type: string
                   example: 11111
+                intitule:
+                  type: string
+                  example: "Banque principale"
                 guichet:
                   type: string
                   example: 22222
@@ -792,6 +816,9 @@ components:
                 iban:
                   type: string
                   example: FR7611111222223333333333391
+                pays:
+                  type: string
+                  example: France
             conditions_paiement:
               type: array
               items:
@@ -918,6 +945,37 @@ components:
           type: string
           description: Adresse e-mail
           example: cli@neoclif.fr
+        qualite:
+          type: string
+          description: Qualite
+          maxLength: 17
+          example: Monsieur
+        interlocuteur:
+          type: string
+          description: Interlocuteur
+          maxLength: 35
+          example: Dupont
+        telephone:
+          type: string
+          description: Téléphone
+          maxLength: 21
+          example: 0122334455
+        telecopie:
+          type: string
+          description: Télécopie
+          maxLength: 21
+          example: 0199887766
+        tiers_payeur:
+          type: string
+          description: >-
+            Identifiant du tiers payeur, champ `id` retourné par `GET
+            /api/v2/customers si vide alors serra identique à l'id en cours
+          maxLength: 17
+        code_ape:
+          type: string
+          description: Code APE
+          maxLength: 7
+          example: 52.3A
         collaborateur_id:
           type: integer
           description: >-
@@ -933,6 +991,11 @@ components:
             - cle
             - bic
           properties:
+            intitule:
+              type: string
+              maxLength: 35
+              description: Intitulé de la banque
+              example: Banque principale
             code_banque:
               type: string
               maxLength: 14
@@ -958,8 +1021,15 @@ components:
               maxLength: 11
               description: Code BIC
               example: CRLYFR87987
+            pays:
+              type: string
+              maxLength: 35
+              description: Pays
+              example: France
         informations_libres:
           type: object
+          description: >-
+            Liste des informations libres varie en fonction de la base Sage utilisée, dans cet exemple la base dispose des deux champs libres suivant sur la fiche client : finess et typologie_commerciale
           properties:
             finess:
               type: string
@@ -1101,6 +1171,37 @@ components:
           example: cli@neoclif.fr
           minLength: 0
           maxLength: 69
+        qualite:
+          type: string
+          description: Qualite
+          maxLength: 17
+          example: Monsieur
+        interlocuteur:
+          type: string
+          description: Interlocuteur
+          maxLength: 35
+          example: Dupont
+        telephone:
+          type: string
+          description: Téléphone
+          maxLength: 21
+          example: 0122334455
+        telecopie:
+          type: string
+          description: Télécopie
+          maxLength: 21
+          example: 0199887766
+        tiers_payeur:
+          type: string
+          description: >-
+            Identifiant du tiers payeur, champ `id` retourné par `GET
+            /api/v2/customers si vide alors serra identique à l'id en cours
+          maxLength: 17
+        code_ape:
+          type: string
+          description: Code APE
+          maxLength: 7
+          example: 52.3A
         collaborateur_id:
           type: integer
           description: >-
@@ -1117,6 +1218,11 @@ components:
             - cle
             - bic
           properties:
+            intitule:
+              type: string
+              maxLength: 35
+              description: Intitulé de la banque
+              example: Banque principale
             code_banque:
               type: string
               maxLength: 14
@@ -1142,8 +1248,15 @@ components:
               maxLength: 11
               description: Code BIC
               example: CRLYFR87987
+            pays:
+              type: string
+              maxLength: 35
+              description: Pays
+              example: France
         informations_libres:
           type: object
+          description: >-
+            Liste des informations libres varie en fonction de la base Sage utilisée, dans cet exemple la base dispose des deux champs libres suivant sur la fiche client : finess et typologie_commerciale
           properties:
             finess:
               type: string
@@ -2108,6 +2221,7 @@ components:
         - date_debut
         - date_fin
         - collaborateur_id
+        - livraison_id
       properties:
         reference:
           type: string
@@ -2146,6 +2260,12 @@ components:
             /api/v2/collaborateur`
             Dans le cas d'un bon de livraison, ce champs peut être mis à 0 pour ne pas renseigner de collaborateur.
           example: 1
+        livraison_id:
+          type: integer
+          description: >-
+            Identifiant du lieu de livraison, champ `livraison.id` retourné par `GET
+            /api/v2/customers/{ID-CLIENT} si égal à zéro alors reprend l'adresse principale
+          example: 51
         echeances:
           type: array
           items:
