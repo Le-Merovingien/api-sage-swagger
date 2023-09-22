@@ -6,7 +6,7 @@ info:
     Error informations :
     - [Sage API repository](https://github.com/Le-Merovingien/api-sage-swagger)
     API Sage 100c
-  version: 2.0.9
+  version: 2.0.11
 tags:
   - name: Articles
   - name: Collaborater
@@ -18,6 +18,7 @@ tags:
   - name: Subscription Models
   - name: Subscriptions
   - name: Subscription Process
+  - name: Informations
 security:
   - x-api-key: []
 paths:
@@ -33,6 +34,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Collaborater'
+  /api/v2/informations:
+    get:
+      tags:
+        - Informations
+      description: Returns api version and database information
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Informations'
   /api/v2/subscription-process:
     post:
       tags:
@@ -340,6 +353,36 @@ paths:
                   id:
                     type: integer
                     example: 24
+  /api/v2/customers/delivery-adresses/{contactId}:
+    delete:
+      tags:
+        - Customers Delivery
+      description: Suppression d'une adresse de livraison, la suppression est impossible si l'adresse de livraison est définie comme principale dans Sage
+      parameters:
+        - name: contactId
+          in: path
+          description: Id de l'adresse
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Adress deleted.
+                  id:
+                    type: integer
+                    example: 24
   /api/v2/delivery-orders:
     post:
       tags:
@@ -601,6 +644,24 @@ components:
         items:
           type: integer
           example: 3
+    Informations:
+      type: object
+      properties:
+        version:
+          type: string
+          example: 2.0.11
+        sql:
+          type: object
+          properties:
+            instance:
+              type: string
+              example: "(local)\\SQLSERVER"
+            base:
+              type: string
+              example: "BIJOU"
+            user:
+              type: string
+              example: "api"
     Collaborater:
       type: object
       properties:
@@ -1317,10 +1378,7 @@ components:
       type: object
       required:
         - nom
-        - prenom
         - service
-        - fonction
-        - email
         - type
       properties:
         nom:
@@ -1332,7 +1390,6 @@ components:
         prenom:
           type: string
           description: Prénom du contact
-          minLength: 1
           maxLength: 35
           example: Alice
         service:
@@ -1353,6 +1410,11 @@ components:
           description: Adresse e-mail du contact
           maxLength: 69
           example: adupont@neo.fr
+        telephone:
+          type: string
+          description: Téléphone
+          maxLength: 21
+          example: 0322335566
         type:
           type: integer
           description: >-
@@ -1366,11 +1428,6 @@ components:
       required:
         - id
         - nom
-        - prenom
-        - service
-        - fonction
-        - email
-        - type
       properties:
         id:
           type: integer
@@ -1406,7 +1463,12 @@ components:
           type: string
           description: Adresse e-mail du contact
           maxLength: 69
-          example: adupont@neo.fr
+          example: adupont@neo.
+        telephone:
+          type: string
+          description: Téléphone
+          maxLength: 21
+          example: 0322335566
         type:
           type: integer
           description: >-
@@ -1419,17 +1481,8 @@ components:
       type: object
       required:
         - intitule
-        - adresse
-        - complement
-        - code_postal
-        - ville
-        - code_region
-        - pays
-        - contact
         - expedition
         - condition
-        - telephone
-        - email
       properties:
         intitule:
           type: string
@@ -1501,18 +1554,8 @@ components:
       type: object
       required:
         - id
-        - intitule
-        - adresse
-        - complement
-        - code_postal
-        - ville
-        - code_region
-        - pays
-        - contact
         - expedition
         - condition
-        - telephone
-        - email
       properties:
         id:
           type: integer
@@ -2212,16 +2255,9 @@ components:
     DeliveryOrderPost:
       type: object
       required:
-        - reference
         - client
-        - date_document
-        - date_livraison
         - articles
         - souche_id
-        - date_debut
-        - date_fin
-        - collaborateur_id
-        - livraison_id
       properties:
         reference:
           type: string
@@ -2296,7 +2332,6 @@ components:
             type: object
             required:
               - reference
-              - designation
               - quantite
               - prixHT
               - remise
