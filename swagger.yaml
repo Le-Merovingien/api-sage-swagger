@@ -353,13 +353,13 @@ paths:
                   id:
                     type: integer
                     example: 24
-  /api/v2/customers/delivery-adresses/{contactId}:
+  /api/v2/customers/delivery-adresses/{DeliveryId}:
     delete:
       tags:
         - Customers Delivery
       description: Suppression d'une adresse de livraison, la suppression est impossible si l'adresse de livraison est définie comme principale dans Sage
       parameters:
-        - name: contactId
+        - name: Delivery
           in: path
           description: Id de l'adresse
           required: true
