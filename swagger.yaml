@@ -6,7 +6,7 @@ info:
     Error informations :
     - [Sage API repository](https://github.com/Le-Merovingien/api-sage-swagger)
     API Sage 100c
-  version: 2.0.11
+  version: 2.0.12
 tags:
   - name: Articles
   - name: Collaborater
@@ -2295,6 +2295,12 @@ components:
             Identifiant du collaborateur, champ `id` retourné par `GET
             /api/v2/collaborateur`
             Dans le cas d'un bon de livraison, ce champs peut être mis à 0 pour ne pas renseigner de collaborateur.
+          example: 1
+        tiers_payeur:
+          type: integer
+          description: >-
+            Identifiant du tiers payeur
+            Si vide, reprend le n° du client en cours.
           example: 1
         livraison_id:
           type: integer
