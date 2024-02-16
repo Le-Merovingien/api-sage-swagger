@@ -6,7 +6,7 @@ info:
     Error informations :
     - [Sage API repository](https://github.com/Le-Merovingien/api-sage-swagger)
     API Sage 100c
-  version: 2.0.13
+  version: 2.0.16
 tags:
   - name: Articles
   - name: Collaborater
@@ -2313,14 +2313,15 @@ components:
           items:
             type: object
             required:
-              - montant
+              - repartition
               - reglement_id
               - date
             properties:
-              montant:
+              repartition:
                 type: number
-                description: Montant
-                minimum: 0
+                description: Pourcentage de la répartition
+                minimum: 1
+                maximum: 100
                 example: 2.12
               reglement_id:
                 type: integer
@@ -2383,6 +2384,20 @@ components:
                 type: string
                 description: Note complémentaire lié à la ligne article
                 example: Mon texte complémantaire
+              informations_libres:
+                type: object
+                description: >-
+                  Liste des informations libres varie en fonction de la base Sage utilisée
+                properties:
+                  IL_S0:
+                    type: number
+                    example: 0.52
+                  IL_S1:
+                    type: number
+                    example: 0.52
+                  IL_ANCIENPRIX:
+                    type: number
+                    example: 12.52
     SubscriptionModelPut:
       type: object
       required:
