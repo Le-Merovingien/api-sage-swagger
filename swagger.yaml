@@ -803,6 +803,9 @@ components:
                   type:
                     type: string
                     example: 1
+                  telephone:
+                    type: string
+                    example: 0655442233
             livraisons:
               type: array
               items:
